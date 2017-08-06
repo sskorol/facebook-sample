@@ -7,7 +7,6 @@ import io.vavr.control.Option;
 import java.util.Objects;
 
 import static org.joor.Reflect.on;
-;
 
 public final class PageFactory {
 
