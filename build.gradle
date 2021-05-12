@@ -1,0 +1,60 @@
+plugins {
+    id "io.qameta.allure" version "2.3"
+}
+
+group 'io.github.sskorol'
+version '1.0.0'
+description 'Simple UI and REST API testing app'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+ext {
+    gradleScriptDir = "${rootProject.projectDir}/gradle"
+    profile = project.hasProperty("buildProfile") ? project.getProperty("buildProfile") : "ui"
+}
+
+repositories {
+    jcenter()
+}
+
+[compileJava, compileTestJava]*.options*.compilerArgs = ['-parameters']
+
+dependencies {
+    compile('io.github.sskorol:test-data-supplier:1.1.0',
+            'org.jooq:joor:0.9.6',
+            'one.util:streamex:0.6.5',
+            'org.projectlombok:lombok:1.16.18',
+            'io.vavr:vavr:0.9.0',
+            'org.seleniumhq.selenium:selenium-java:3.4.0',
+            'io.github.bonigarcia:webdrivermanager:1.7.0',
+            'com.github.ben-manes.caffeine:caffeine:2.5.3',
+            'org.aeonbits.owner:owner-java8:1.0.6',
+            'io.vavr:vavr:0.9.0',
+            'com.google.code.gson:gson:2.8.1',
+            'com.google.api-client:google-api-client:1.22.0',
+            'com.google.oauth-client:google-oauth-client-jetty:1.22.0',
+            'com.google.apis:google-api-services-gmail:v1-rev70-1.22.0',
+            'io.qameta.allure:allure-testng:2.0-BETA16',
+            'org.aspectj:aspectjrt:1.8.10',
+            'org.aspectj:aspectjweaver:1.8.10')
+
+    testCompile('org.assertj:assertj-core:3.8.0',
+            'io.rest-assured:rest-assured:3.0.3'
+    )
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion '4.0.2'
+}
+
+apply from: "${gradleScriptDir}/${profile}-profile.gradle"
+
+allure {
+    autoconfigure = true
+    version = '2.3.1'
+    useTestNG {
+        version = '2.0-BETA16'
+    }
+}

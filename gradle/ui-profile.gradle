@@ -1,0 +1,23 @@
+configurations {
+    agent
+}
+
+dependencies {
+    agent 'org.aspectj:aspectjweaver:1.8.10'
+}
+
+test.doFirst {
+    jvmArgs "-javaagent:${configurations.agent.singleFile}"
+}
+
+test {
+    useTestNG() {
+        listeners << 'io.github.sskorol.framework.core.listeners.BeforeMethodListener'
+        listeners << 'io.github.sskorol.framework.core.listeners.PageCacheProvider'
+        listeners << 'io.github.sskorol.core.DataProviderTransformer'
+        suites 'src/test/resources/suites/ui-suite.xml'
+    }
+
+    systemProperty 'allure.model.indentOutput', true
+    systemProperty 'allure.results.directory', 'build/allure-results'
+}
